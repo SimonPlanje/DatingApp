@@ -1,0 +1,115 @@
+* {
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+  box-sizing: border-box;
+  font-family: "Open Sans", sans-serif;
+}
+
+body {
+  background-image: url(images/achtergrond.PNG);
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+header {
+  background: #252531;
+  display: flex;
+  justify-content: space-between;
+  padding: 0.8em;
+  align-items: center;
+}
+
+header img {
+  height: 3.2em;
+}
+
+.logo {
+  height: 2em;
+  margin-left: 2em;
+}
+
+header .profilepicture {
+  border-radius: 100%;
+  margin-right: 2em;
+}
+
+nav {
+  position: absolute;
+  right: 20%;
+}
+nav ul {
+  display: flex;
+}
+nav li {
+  color: white;
+  font-weight: 300;
+  padding-right: 5em;
+}
+
+nav li:last-of-type {
+  font-weight: 600;
+}
+
+.person {
+  color: white;
+  display: flex;
+  background-color: #252531;
+  width: 45em;
+  margin: 5em 0em 0em 10em;
+  justify-content: center;
+}
+
+.person img {
+  display: block;
+  width: 100%;
+}
+
+.text {
+  width: 20em;
+  margin: 1em;
+  font-size: 1.5em;
+}
+
+h3 {
+  font-size: 1em;
+  font-weight: 600;
+}
+
+.text p {
+  padding-top: 2em;
+  font-size: 0.7em;
+  font-weight: 100;
+}
+
+form {
+  display: inline-block;
+  margin-left: 17em;
+}
+
+form button {
+  border: none;
+  width: 6em;
+  height: 6em;
+  margin: 2em;
+  background-color: transparent;
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+}
+
+form button:first-of-type {
+  background-image: url(images/dislike.png);
+}
+form button:last-of-type {
+  background-image: url(images/like.png);
+}
+
+form button:nth-of-type(2) {
+  background-image: url(images/megalike.png);
+}
+
+form button:hover {
+  transition: ease-out 0.2s;
+  cursor: pointer;
+  transform: rotate(20deg);
+}
