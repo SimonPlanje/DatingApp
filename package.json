@@ -1,0 +1,19 @@
+{
+  "name": "datingapp",
+  "version": "1.0.0",
+  "description": "This repo will contain a feature of an upcoming datingapp",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SimonPlanje/DatingApp.git"
+  },
+  "author": "Simon Planje",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/SimonPlanje/DatingApp/issues"
+  },
+  "homepage": "https://github.com/SimonPlanje/DatingApp#readme"
+}
