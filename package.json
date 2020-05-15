@@ -15,5 +15,9 @@
   "bugs": {
     "url": "https://github.com/SimonPlanje/DatingApp/issues"
   },
-  "homepage": "https://github.com/SimonPlanje/DatingApp#readme"
+  "homepage": "https://github.com/SimonPlanje/DatingApp#readme",
+  "dependencies": {
+    "camelcase": "^6.0.0",
+    "express": "^4.17.1"
+  }
 }
