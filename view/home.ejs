@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,600;0,700;0,800;1,300;1,400;1,600;1,700;1,800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../static/style.css" />
+    <title>static site v1.0</title>
+  <body>
+    <header>
+      <nav>
+        <ul>
+          <li>Likes</li>
+          <li>Matches</li>
+          <li>Let's find some love</li>
+        </ul>
+      </nav>
+      <a href="index.html"
+        ><img src="images/logo.png" alt="perfect logo" class="logo" />
+      </a>
+      <a href="profile.html">
+        <img
+          src="images/profilepicture.jpg"
+          class="profilepicture"
+          alt="profilepicture"
+        />
+      </a>
+    </header>
+    <div class="person">
+      <figure>
+        <img src="images/swipe.jpg" alt="" />
+      </figure>
+      <div class="text">
+        <h2 class="name"><%= data.Name %></h2>
+        <h3 class="age"></h3>
+        <h3 class="city">Diemen</h3>
+        <p>
+          Hoi! ik ben Josje uit Diemen. Hou van sporten en heel veel lorem ipsum
+          in mijn "over mij" stukje plakken! Lorem ipsum dolor sit amet
+          consectetur adipisicing elit. Ut voluptate distinctio error quidem,
+          perspiciatis porro voluptates numquam sint nesciunt labore est quam
+          nihil explicabo deserunt necessitatibus ipsum rerum reprehenderit ad!
+        </p>
+      </div>
+    </div>
+    <form>
+      <button class="dislike">Dislike</button>
+      <button class="mega-like">Megalike</button>
+      <button class="like">Like</button>
+    </form>
+  </body>
+</html>
