@@ -21,6 +21,10 @@ app.get("/", function (req, res) {
   res.render("home"); //normaal gebruik je res.send om een static html pagina te laden, met res.render kan je dynamische templates inladen.
 });
 
+app.get("/person", function (req, res) {
+  res.render("person");
+});
+
 function users(req, res) {
   res.render("home.ejs", { data: data });
 }
