@@ -2,7 +2,7 @@ const express = require("express"); //import express om te gebruiken. Express va
 const app = express(); //koppel de var express aan de var app zodat je met alleen app epxress kan oproepen
 const slug = require("slug"); //zorgt ervoor dat je geen html code in een formulier kan proppen.
 const bodyParser = require("body-parser"); //maakt het makkelijker om de values uit een formulier te halen
-const mongo = require("monogodb");
+const mongo = require("mongodb");
 require("dotenv").config();
 
 app.listen(8090, () => console.log("server is working"));
@@ -26,16 +26,22 @@ app.post("/liked", liken);
 app.get("/liked", likepage);
 
 //CONNECTING WITH MONGODB-------------------------------------------
-const var = db;
-  const uri = process.env.DB_LINK;
- 
-  mongo.MongoClient.connect(url, function (err, client){
-    if (err)
-  })
+let db = null;
+const uri = process.env.DB_LINK;
 
+mongo.MongoClient.connect(uri, function (err, client) {
+  {
+    useUnifiedTopology: true;
+  }
+  if (err) {
+    console.log(err);
+  }
 
+  db = client.db(process.env.DB_NAME);
+  console.log("Connected correctly to MongoDB server");
+  console.log(process.env.DB_NAME);
+});
 
-main().catch(console.error);
 //------------------------------------------------------------
 function index(req, res) {
   res.send("Hello Templating!");
@@ -54,17 +60,17 @@ function likepage(req, res) {
   res.render("liked.ejs");
 }
 
-function add(req, res) {
-  let id = slug(req.body.firstname).toLowerCase();
+// function add(req, res) {
+//   let id = slug(req.body.firstname).toLowerCase();
 
-  data.push({
-    firstname: req.body.firstname,
-    age: req.body.age,
-    city: req.body.city,
-    description: req.body.description,
-  });
-  res.redirect("/users");
-}
+//   db.collection("users").insertOne({
+//     firstname: req.body.firstname,
+//     age: req.body.age,
+//     city: req.body.city,
+//     description: req.body.description,
+//   });
+//   res.redirect("/users");
+// }
 
 function liken(req, res) {
   let id = slug(req.body.firstname).toLowerCase();
@@ -87,3 +93,24 @@ let disliked = [];
 app.use(function (req, res, next) {
   res.status(404).send("sorry, dit heb ik niet gevonden...");
 }); //custom 404 error :)
+
+function add(req, res, next) {
+  db.collection("users").insertOne(
+    {
+      name: req.body.name,
+      age: req.body.age,
+      city: req.body.city,
+      description: req.body.description,
+    },
+    insertdata
+  );
+
+  function insertdata(err, doc) {
+    if (err) {
+      next(err);
+    } else {
+      console.log("pushing data...");
+      res.redirect("/users");
+    }
+  }
+}
