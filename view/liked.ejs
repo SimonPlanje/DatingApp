@@ -3,8 +3,7 @@
   <%- include ("includes/head.ejs") %>
 
   <body>
-    <%- include ("includes/header.ejs") %> <% for (var index = 0; index <
-    data.length; index++) { %>
+    <%- include ("includes/header.ejs") %>
     <div class="person">
       <figure>
         <img src="/images/swipe.jpg" alt="" />
@@ -18,15 +17,5 @@
         </p>
       </div>
     </div>
-
-    <form>
-      <label for="dislike"></label>
-      <input type="submit" name="dislike" value="dislike" />
-      <label for="dislike"></label>
-      <input type="submit" name="megalike" value="megalike" />
-      <label for="dislike"></label>
-      <input type="submit" name="like" value="like" />
-    </form>
-    <% } %>
   </body>
 </html>

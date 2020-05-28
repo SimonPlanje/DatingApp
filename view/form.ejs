@@ -1,12 +1,22 @@
-<%- include ("partials/head.ejs") %>
+<%- include ("includes/head.ejs") %>
 
-<title>Add a movie</title>
+<title>add a user to like</title>
 
-<h1>Add a new movie</h1>
+<h1>New user</h1>
 
-<form action="/" method="POST">
-  <label>Title <input name="title" /></label>
-  <label> Plot <input name="plot" /></label>
-  <label>Description<textarea name="descripton" rows="5"> </textarea></label>
-  <button>Add</button>
+<form action=/users method="post">
+  <legend>New user</legend>
+  <label for="firstname">What is your first name?</label>
+  <input type="text" id="firstname" name="firstname" />
+  <label for="lastname">How old are you?</label>
+  <input type="number" id="age" name="age" />
+  <label for="city">Where do you live?</label>
+  <input type="text" id="city" name="city" />
+  <label for="description" name="description"
+    >Tell us something about you!<textarea
+      name="description"
+      rows="5"
+    ></textarea>
+  </label>
+  <button>add</button>
 </form>

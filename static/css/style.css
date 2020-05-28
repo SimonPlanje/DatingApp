@@ -7,9 +7,10 @@
 }
 
 body {
-  background-image: url(images/achtergrond.PNG);
+  background-image: url(/images/achtergrond.PNG);
   background-repeat: no-repeat;
-  background-size: cover;
+  background-size: 100%;
+  background-attachment: fixed;
 }
 
 header {
@@ -98,14 +99,14 @@ form button {
 }
 
 form button:first-of-type {
-  background-image: url(images/dislike.png);
+  background-image: url(/images/dislike.png);
 }
 form button:last-of-type {
-  background-image: url(images/like.png);
+  background-image: url(/images/like.png);
 }
 
 form button:nth-of-type(2) {
-  background-image: url(images/megalike.png);
+  background-image: url(/images/megalike.png);
 }
 
 form button:hover {
