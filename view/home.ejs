@@ -10,7 +10,7 @@
         <img src="/images/swipe.jpg" alt="" />
       </figure>
       <div class="text">
-        <h2 class="firstname"><%= data[index].firstname %></h2>
+        <h2 class="firstname"><%= data[index].name %></h2>
         <h3 class="age"><%= data[index].age %></h3>
         <h3 class="city"><%= data[index].city %></h3>
         <p>
@@ -19,13 +19,13 @@
       </div>
     </div>
 
-    <form>
+    <form action="/liked" method="post">
       <label for="dislike"></label>
-      <input type="submit" name="dislike" value="dislike" />
+      <input type="submit" name="review" value="dislike" />
       <label for="dislike"></label>
-      <input type="submit" name="megalike" value="megalike" />
+      <input type="submit" name="review" value="megalike" />
       <label for="dislike"></label>
-      <input type="submit" name="like" value="like" />
+      <input type="submit" name="review" value="like" />
     </form>
     <% } %>
   </body>

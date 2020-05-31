@@ -3,6 +3,7 @@ const app = express(); //koppel de var express aan de var app zodat je met allee
 const slug = require("slug"); //zorgt ervoor dat je geen html code in een formulier kan proppen.
 const bodyParser = require("body-parser"); //maakt het makkelijker om de values uit een formulier te halen
 const mongo = require("mongodb");
+const session = require("express-session");
 require("dotenv").config();
 
 app.listen(8090, () => console.log("server is working"));
@@ -12,53 +13,113 @@ app.use(bodyParser.urlencoded({ extended: true })); //ontvang data uit het formu
 
 app.use(express.static(__dirname + "/static")); //zorgt dat ik mijn css en images bestanden kan linken aan mijn .ejs pagia's
 
+//------SESSION AANMAKEN\
+app.use(
+  session({
+    resave: false,
+    saveUninitialized: true,
+    secret: process.env.SESSION_SECRET,
+  })
+);
+
 /* 1. Set the templating engine👇 */
 app.set("view engine", "ejs");
 app.set("views", "view");
 
-app.get("/", index);
-app.get("/users", users);
+app.get("/", users);
 app.get("/form", form);
-app.post("/users", add);
-app.post("/liked", liken);
-
-//like gedeelte
-app.get("/liked", likepage);
+app.get("/liked", liked);
+app.post("/", add);
 
 //CONNECTING WITH MONGODB-------------------------------------------
 let db = null;
-const uri = process.env.DB_LINK;
+const url = process.env.DB_LINK;
 
-mongo.MongoClient.connect(uri, function (err, client) {
-  {
-    useUnifiedTopology: true;
-  }
+mongo.MongoClient.connect(url, function (err, client) {
   if (err) {
-    console.log(err);
+    throw err;
   }
 
   db = client.db(process.env.DB_NAME);
-  console.log("Connected correctly to MongoDB server");
-  console.log(process.env.DB_NAME);
 });
 
-//------------------------------------------------------------
-function index(req, res) {
-  res.send("Hello Templating!");
+//INSERT DATA WITH FORM------------------------------
+function add(req, res, next) {
+  db.collection("users").insertOne(
+    {
+      name: req.body.firstname,
+      age: req.body.age,
+      city: req.body.city,
+      description: req.body.description,
+      geliked: "nog niet",
+    },
+    done
+  );
+
+  function done(err, data) {
+    if (err) {
+      next(err);
+    } else {
+      res.redirect("/");
+    }
+  }
+}
+//------------------ZET DATA TO ADD TO THE LIKE OR DISLIKE APP------------------------------------------
+function users(req, res, next) {
+  db.collection("users").find({ geliked: "nog niet" }).toArray(done);
+  function done(err, user) {
+    if (err) {
+      next(err);
+    } else {
+      res.render("home.ejs", { data: user });
+    }
+  }
 }
 
-/* 2. Send the data with the template 👇 */
-function users(req, res) {
-  res.render("home", { data: data });
+function liked(req, res, next) {
+  db.collection("likeduser").find({ geliked: "liked" }).toArray(done);
+  function done(err, user) {
+    if (err) {
+      next(err);
+    } else {
+      res.render("liked.ejs", { data: likeduser });
+    }
+  }
 }
+
+// function liked(req, res, next) {
+//   db.collection("users").updateOne(
+//     { _id: ObjectID(req.body_id), $set: { geliked: req.body.review.value } },
+//     done
+//   );
+
+//   function done(err, likeduser) {
+//     if (err) {
+//       next(err);
+//     } else {
+//       res.redirect("/liked", { data: likeduser });
+//     }
+//   }
+// }
+//------------------ZET DATA TO ADD TO THE LIKE OR DISLIKE APP------------------------------------------
+
+// function like(req, res, next) {
+//   db.collection("users").updateOne(
+//     { _id: client.ObjectID(req.body._id) },
+//     {
+//       $set: { geliked: "like" },
+//     }
+//   );
+// }
+//--------------------------
 
 function form(req, res) {
-  res.render("form.ejs");
+  res.render("form");
 }
 
-function likepage(req, res) {
-  res.render("liked.ejs");
-}
+// function likepage(req, res) {
+//   res.render("liked.ejs");
+// }
 
 // function add(req, res) {
 //   let id = slug(req.body.firstname).toLowerCase();
@@ -72,45 +133,22 @@ function likepage(req, res) {
 //   res.redirect("/users");
 // }
 
-function liken(req, res) {
-  let id = slug(req.body.firstname).toLowerCase();
+// function (req, res) {
+//   let id = slug(req.body.firstname).toLowerCase();
 
-  liked.push({
-    firstname: req.body.firstname,
-    age: req.body.age,
-    city: req.body.city,
-    description: req.body.description,
-  });
-  res.redirect("/liked");
-}
+//   liked.push({
+//     firstname: req.body.firstname,
+//     age: req.body.age,
+//     city: req.body.city,
+//     description: req.body.description,
+//   });
+//   res.redirect("/liked");
+// }
 
-/* 3. List of rappers as an array of objects 👇 */
-
-let data = [];
-let liked = [];
-let disliked = [];
+// let data = [];
+// let liked = [];
+// let disliked = [];
 
 app.use(function (req, res, next) {
   res.status(404).send("sorry, dit heb ik niet gevonden...");
 }); //custom 404 error :)
-
-function add(req, res, next) {
-  db.collection("users").insertOne(
-    {
-      name: req.body.name,
-      age: req.body.age,
-      city: req.body.city,
-      description: req.body.description,
-    },
-    insertdata
-  );
-
-  function insertdata(err, doc) {
-    if (err) {
-      next(err);
-    } else {
-      console.log("pushing data...");
-      res.redirect("/users");
-    }
-  }
-}
