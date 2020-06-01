@@ -19,13 +19,15 @@
       </div>
     </div>
 
-    <form action="/liked" method="post">
+    <form action=/liked method="post">
       <label for="dislike"></label>
-      <input type="submit" name="review" value="dislike" />
+      <input type="radio" name="review" value="dislike" />
       <label for="dislike"></label>
-      <input type="submit" name="review" value="megalike" />
+      <input type="radio" name="review" value="megalike" />
       <label for="dislike"></label>
-      <input type="submit" name="review" value="like" />
+      <input type="radio" name="review" value="like" />
+      <input type="text" name="id" value="<%= data[index]._id %>">
+      <button>submit</button>
     </form>
     <% } %>
   </body>
