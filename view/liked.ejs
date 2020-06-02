@@ -1,22 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
-  <%- include ("includes/head.ejs") %>
+<%- include ("includes/head.ejs") %>
 
-  <body>
-    <%- include ("includes/header.ejs") %> <% for (var index = 0; index <
-    data.length; index++) { %>
-    <div class="person">
-      <figure>
-        <img src="/images/swipe.jpg" alt="" />
-      </figure>
-      <div class="text">
-        <h2 class="firstname"><%= data[index].firstname %></h2>
-        <h3 class="age"><%= data[index].age %></h3>
-        <h3 class="city"><%= data[index].city %></h3>
-        <p>
-          <%= data[index].description %>
-        </p>
-      </div>
+<body>
+  <%- include ("includes/header.ejs") %> <% for (var index = 0; index <
+    likedOne.length; index++) { %>
+  <div class="person">
+    <figure>
+      <img src="/images/swipe.jpg" alt="" />
+    </figure>
+    <div class="text">
+      <h2 class="firstname"><%= likedOne[index].firstname %></h2>
+      <h3 class="age"><%= likedOne[index].age %></h3>
+      <h3 class="city"><%= likedOne[index].city %></h3>
+      <p>
+        <%= likedOne[index].description %>
+      </p>
     </div>
-  </body>
+  </div>
+</body>
+
 </html>

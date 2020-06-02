@@ -89,6 +89,7 @@ form {
 }
 
 form button {
+
   border: none;
   width: 6em;
   height: 6em;
@@ -113,4 +114,8 @@ form button:hover {
   transition: ease-out 0.2s;
   cursor: pointer;
   transform: rotate(20deg);
+}
+
+form button:focus{
+  outline: none;
 }

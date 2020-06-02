@@ -61,7 +61,9 @@ function home(req, res) {
 }
 app.get("/", form);
 app.post("/", add);
-
+app.get('/home', home);
+app.post("/home", liken);
+app.get("/likes", likepage)
 //-------------SESSION----------------------------
 
 app.use((req, res, next) => {
@@ -83,26 +85,79 @@ function add(req, res, next) {
     likes: "",
   });
 
-  userDB.find(
+  userDB.findOne(
     {
-      name: req.body.firstname,
-      age: req.body.age,
-      city: req.body.city,
-      description: req.body.description,
+      name: req.body.firstname
     },
     function (err, data) {
       if (err) {
         console.log("It is not working");
       } else {
-        req.session.sessionId = userDB._id;
-        res.render("home", { data: req.body });
+        // console.log(data);
+
+        req.session.sessionId = data._id;
+        res.redirect("/home");
+        // console.log(req.sesssion.sessionId);
       }
     }
   );
 }
 
+function home(req, res) {
+  userDB.find({}).toArray((err, result) => {
+    if (err) {
+      res.send(err);
+    } else if (result.length) {
+      res.render('home', {
+        'userprops': result
+      });
+      console.log(result);
+      console.log("wa;lasdf")
+    } else {
+      res.send('No data found');
+    }
+  });
+};
 
+function liken(req, res) {
+  userDB.updateOne({
+    _id: req.session.sessionId
+  }, {
+    $push: {
+      likes: req.body.id
+    }
+  });
 
+  userDB.findOne({
+    _id: req.session.sessionId
+  }, (err, user) => {
+    if (err) {
+      console.log('MongoDB Error:' + err);
+    } else {
+      console.log(user.likes);
+    }
+  });
+}
+
+function likepage(req, res) {
+  userDB.findOne({
+    _id: req.session.sessionId
+  }, (err, user) => {
+    if (err) {
+      console.log('MongoDB Error:' + err);
+    } else {
+      userDB.find({ "_id": { "$in": [user.likes] } })((err, users) => {
+        if (err) {
+          console.log('MongoDB Error:' + err);
+        } else {
+          console.log(users);
+        }
+      });
+    }
+  });
+}
+
+// db.getCollection('feed').find({ "_id": { "$in": [likes] } })
 //------------------ZET DATA TO ADD TO THE LIKE OR DISLIKE APP------------------------------------------
 
 // function users(req, res, next) {
