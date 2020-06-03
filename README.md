@@ -20,7 +20,7 @@ npm install
 ```
 
 Now the server should start without any issues. 
-To start the server type the following in your terminal:
+To start the server type the following into your terminal:
 ```js
 node index.js
 ```
