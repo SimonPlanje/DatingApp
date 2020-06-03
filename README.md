@@ -3,7 +3,7 @@ Hello mate,
 Welcome to my dating feature. In the last couple of weeks I have been working on the liking part of a new dating feature. First I made the following jobstory to help me frame the problem I want to solve.
 
 ## Jobstory
-
+When I am bored during the Corona period and am in the need of social contact with like minded people, I want to be able to quickly find these like minded people so I can start a conversation with them and talk about our shared interests.
 
 ## Installation
 All of the content in this github repository is build from scratch with Node and vanilla javascript, I used mongodb so I can interact with a real and live database. 
