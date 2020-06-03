@@ -13,8 +13,8 @@ So for the installation you will have to follow a few steps to get everything to
 2. Open your Terminal/CMD and navigate to to the map where you pasted the copy of the repo in.
 3. Now it is time to get this feature working, enter the following steps in your terminal.
 
-This npm installation is required because this project contains a lot of the npm packages.
-Type the following into your termial:
+This npm installation is required because this project contains a lot of the npm packages, without these packages this code will not work.
+Type the following into your termial to install the npm packages:
 ```js
 npm install
 ```
