@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include ("includes/head.ejs") %>
+
+<body>
+    <%- include ("includes/header.ejs") %> <% for (var index = 0; index <
+    userprops.length; index++) { %>
+    <div class="person">
+        <figure>
+            <img src="/images/swipe.jpg" alt="" />
+        </figure>
+        <div class="text">
+            <h2 class="firstname"><%= userprops[index].name %></h2>
+            <h3 class="age"><%= userprops[index].age %></h3>
+            <h3 class="city"><%= userprops[index].city %></h3>
+            <p>
+                <%= userprops[index].description %>
+            </p>
+
+        </div>
+    </div>
+
+    <form class="removeData" action=/home method="post">
+        <input type="text" name="id" value="<%= userprops[index]._id %>">
+        <button>submit</button>
+    </form>
+    <% } %>
+</body>
+
+</html>

@@ -3,7 +3,7 @@
   padding: 0;
   list-style-type: none;
   box-sizing: border-box;
-  font-family: "Open Sans", sans-serif;
+  font-family: 'Open Sans', sans-serif;
 }
 
 body {
@@ -52,13 +52,20 @@ nav li:last-of-type {
   font-weight: 600;
 }
 
+main {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 0.8em;
+  align-items: center;
+}
+
 .person {
   color: white;
   display: flex;
   background-color: #252531;
-  width: 45em;
-  margin: 5em 0em 0em 10em;
-  justify-content: center;
+  width: 35%;
+  margin-top: 5em;
 }
 
 .person img {
@@ -83,39 +90,29 @@ h3 {
   font-weight: 100;
 }
 
-form {
-  display: inline-block;
-  margin-left: 17em;
+#likeForm .reviewButtons {
+  position: relative;
+  display: flex;
+  width: 100%;
+  justify-content: center;
 }
 
-form button {
-
-  border: none;
-  width: 6em;
-  height: 6em;
-  margin: 2em;
-  background-color: transparent;
+#likeForm .megalike,
+#likeForm .like,
+#likeForm .dislike {
+  margin: 2rem;
+  display: block;
+  height: 8em;
+  width: 8em;
   background-repeat: no-repeat;
-  background-size: 100% 100%;
 }
 
-form button:first-of-type {
-  background-image: url(/images/dislike.png);
-}
-form button:last-of-type {
-  background-image: url(/images/like.png);
-}
-
-form button:nth-of-type(2) {
-  background-image: url(/images/megalike.png);
-}
-
-form button:hover {
-  transition: ease-out 0.2s;
-  cursor: pointer;
-  transform: rotate(20deg);
-}
-
-form button:focus{
-  outline: none;
+#likeForm .userId,
+#likeForm #like,
+#likeForm #megalike,
+#likeForm #dislike {
+  visibility: hidden;
+  position: absolute;
+  width: 0;
+  height: 0;
 }

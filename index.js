@@ -1,39 +1,42 @@
-const express = require("express"); //import express om te gebruiken. Express var is nu de express funcite
+const express = require('express'); //import express om te gebruiken. Express var is nu de express funcite
 const app = express(); //koppel de var express aan de var app zodat je met alleen app epxress kan oproepen
-const slug = require("slug"); //zorgt ervoor dat je geen html code in een formulier kan proppen.
-const bodyParser = require("body-parser"); //maakt het makkelijker om de values uit een formulier te halen
-require("dotenv").config();
+const slug = require('slug'); //zorgt ervoor dat je geen html code in een formulier kan proppen.
+const bodyParser = require('body-parser'); //maakt het makkelijker om de values uit een formulier te halen
+require('dotenv').config();
 
 //CONST FOR DB
-const mongo = require("mongodb");
+const mongo = require('mongodb');
+const ObjectId = mongo.ObjectID;
 let db = null;
 const url = process.env.DB_LINK;
 let userDB = null;
+let matchDB = null;
 
 //CONST FOR SESSION
-const session = require("express-session");
-const MongoDBStore = require("connect-mongodb-session")(session);
-const sessionId = "sessionId";
+const session = require('express-session');
+const MongoDBStore = require('connect-mongodb-session')(session);
+const sessionId = 'sessionId';
 const sessionSecret = process.env.SES_SECRET;
 const store = new MongoDBStore({
   uri: url,
-  collection: "sessions",
+  collection: 'sessions',
 });
 
-mongo.MongoClient.connect(url, function (err, client) {
+mongo.MongoClient.connect(url, { useUnifiedTopology: true }, (err, client) => {
   if (err) {
     throw err;
   }
   db = client.db(process.env.DB_NAME);
-  userDB = db.collection("users");
+  userDB = db.collection('users');
+  matchDB = db.collection('match');
 });
 
-app.listen(8090, () => console.log("server is working"));
+app.listen(1000, () => console.log('server is working'));
 
 //------SESSION AANMAKEN\
 
 app.use(
-  require("express-session")({
+  require('express-session')({
     name: sessionId,
     secret: sessionSecret,
     store: store,
@@ -46,158 +49,138 @@ app.use(
   })
 );
 
-app.use("/", express.static("static/style"));
+app.use('/', express.static('static/style'));
 app.use(bodyParser.urlencoded({ extended: true })); //ontvang data uit het formulier en gebruik data in de code
 
-app.use(express.static(__dirname + "/static")); //zorgt dat ik mijn css en images bestanden kan linken aan mijn .ejs pagia's
+app.use(express.static(__dirname + '/static')); //zorgt dat ik mijn css en images bestanden kan linken aan mijn .ejs pagia's
 
+app.set('view engine', 'ejs');
+app.set('views', 'views');
 
-/* 1. Set the templating engine👇 */
-app.set("view engine", "ejs");
-app.set("views", "view");
+//----------------THIS IS WHERE THE MAGIC BEGINS-----------------------
 
-function home(req, res) {
-  res.render("form");
-}
-app.get("/", form);
-app.post("/", add);
-app.get('/home', home);
-app.post("/home", liken);
-app.get("/likes", likepage)
-//-------------SESSION----------------------------
+//POST FORM
 
-app.use((req, res, next) => {
-  const { userId } = req.session;
-  if (userId) {
-    res.locals.user = user.find();
-  }
+app.get('/', async (req, res) => {
+  res.render('form');
 });
 
-//CONNECTING WITH MONGODB-------------------------------------------
-
-//INSERT DATA WITH FORM------------------------------
-function add(req, res, next) {
-  userDB.insertOne({
+app.post('/', (req, res) => {
+  const data = {
     name: req.body.firstname,
     age: req.body.age,
     city: req.body.city,
     description: req.body.description,
-    likes: "",
-  });
+    likes: [],
+    megalikes: [],
+    number: 0,
+  };
 
-  userDB.findOne(
-    {
-      name: req.body.firstname
-    },
-    function (err, data) {
-      if (err) {
-        console.log("It is not working");
-      } else {
-        // console.log(data);
+  //check if data is inserted
+  if (data) {
+    //creatre sesssion id
+    req.session.sessionId = data;
+    // console.log('session id =');
+    // console.log(req.session.sessionId);
+    //insert data to database
+    userDB.insertOne(data);
+    console.log('added ' + data.name + ' to database');
+    console.log(req.session);
 
-        req.session.sessionId = data._id;
-        res.redirect("/home");
-        // console.log(req.sesssion.sessionId);
+    res.redirect('/home');
+  } else {
+    console.log('Data did not load, try again!');
+  }
+});
+
+//GET HOMEPAGE
+app.get('/home', async (req, res) => {
+  if (req.session.sessionId._id) {
+    const users = await userDB
+      .find({ _id: { $ne: ObjectId(req.session.sessionId._id) } })
+      .toArray();
+
+    const index = await userDB.findOne({
+      _id: ObjectId(req.session.sessionId._id),
+    });
+    res.render('home', { userData: users[index.number] });
+  }
+});
+
+//LIKE DISLIKE OR MEGALIKE THE USER-----------------
+
+app.post('/like', async (req, res) => {
+  if (req.body.review === 'like') {
+    userDB.updateOne(
+      {
+        _id: ObjectId(req.session.sessionId._id),
+      },
+      {
+        $inc: { number: 1 },
+        $push: {
+          likes: req.body.id,
+        },
       }
-    }
-  );
-}
+    );
+    userDB.updateMany({}, { $set: { 'likes.$[]': ObjectId(req.body.id) } });
+    req.session.sessionId.likes.push(ObjectId(req.body.id));
+  } else if (req.body.review === 'dislike') {
+    userDB.updateOne(
+      {
+        _id: ObjectId(req.session.sessionId._id),
+      },
+      {
+        $inc: { number: 1 },
+      }
+    );
+  } else if (req.body.review === 'megalike') {
+    userDB.updateOne(
+      {
+        _id: ObjectId(req.session.sessionId._id),
+      },
+      {
+        $inc: { number: 1 },
+        $push: {
+          megalikes: req.body.id,
+        },
+      }
+    );
+    req.session.sessionId.megalikes.push(ObjectId(req.body.id));
+  }
 
-function home(req, res) {
-  userDB.find({}).toArray((err, result) => {
-    if (err) {
-      res.send(err);
-    } else if (result.length) {
-      res.render('home', {
-        'userprops': result
-      });
-      console.log(result);
-      console.log("wa;lasdf")
-    } else {
-      res.send('No data found');
-    }
-  });
-};
+  res.redirect('home');
+});
 
-function liken(req, res) {
-  userDB.updateOne({
-    _id: req.session.sessionId
-  }, {
-    $push: {
-      likes: req.body.id
-    }
-  });
+app.get('/likes', async (req, res) => {
+  if (req.session.sessionId.likes) {
+    console.log(req.session.sessionId.likes);
+    const usersIds = await userDB
+      .find({ _id: { $in: req.session.sessionId.likes } })
+      .toArray();
+    console.log(usersIds);
 
-  userDB.findOne({
-    _id: req.session.sessionId
-  }, (err, user) => {
-    if (err) {
-      console.log('MongoDB Error:' + err);
-    } else {
-      console.log(user.likes);
-    }
-  });
-}
+    // res.render('liked', { users: usersIds });
+    //   .toArray();
+    // console.log('dit zijn de likes');
+    // console.log(likes);
+    // console.log(likedUser[0]);
+    // res.render('liked', { users: likedUsers[0] });
 
-function likepage(req, res) {
-  userDB.findOne({
-    _id: req.session.sessionId
-  }, (err, user) => {
-    if (err) {
-      console.log('MongoDB Error:' + err);
-    } else {
-      userDB.find({ "_id": { "$in": [user.likes] } })((err, users) => {
-        if (err) {
-          console.log('MongoDB Error:' + err);
-        } else {
-          console.log(users);
-        }
-      });
-    }
-  });
-}
+    // const likedUsers = req.session.sessionId.likes;
 
-// db.getCollection('feed').find({ "_id": { "$in": [likes] } })
-//------------------ZET DATA TO ADD TO THE LIKE OR DISLIKE APP------------------------------------------
-
-// function users(req, res, next) {
-//   userDB.findOne(
-//     {
-//       name: req.body.firstname,
-//     },
-//     function (err, user) {
-//       if (err) {
-//         next(err);
-//       } else {
-//         req.session.sessionId = user._id;
-//         console.log(user._id);
-//       }
-//     }
-//   );
-// }
-
-//-----------------------------------------------------
-
-// function like(req, res, next) {
-//   //req.session.userID =
-//   if (req.body.review === "like") {
-//     db.collection("users").updateOne(
-//       { _id: req.session },
-//       {
-//         $push: {
-//           likes: req.body.id,
-//         },
-//       }
-//     );
-//   }
-// }
-
-//------------------------------
-
-function form(req, res) {
-  res.render("form");
-}
+    // const likes = await userDB
+    //   .find({
+    //     _id: { $in: (likedUsers)},
+    //   })
+    //   .toArray();
+    // console.log('dit zijn de likes');
+    // console.log(likes);
+    // console.log(likedUser[0]);
+    res.render('liked', { users: usersIds });
+  }
+});
+// ------------------------------
 
 app.use(function (req, res, next) {
-  res.status(404).send("sorry, dit heb ik niet gevonden...");
+  res.status(404).send('sorry, dit heb ik niet gevonden...');
 }); //custom 404 error

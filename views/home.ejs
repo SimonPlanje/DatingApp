@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+  <%- include ("includes/head.ejs") %>
+
+  <body id="likeForm">
+    <%- include ("includes/header.ejs") %> <% if(userData){ %>
+    <main>
+      <div class="person">
+        <figure>
+          <img src="/images/swipe.jpg" alt="" />
+        </figure>
+        <div class="text">
+          <h2 class="firstname"><%= userData.name %></h2>
+          <h3 class="age"><%= userData.age %></h3>
+          <h3 class="city"><%= userData.city %></h3>
+          <p>
+            <%= userData.description %>
+          </p>
+        </div>
+      </div>
+
+      <div class="reviewButtons">
+        <form class="addData" action="/like" method="post">
+          <input
+            type="text"
+            class="userId"
+            name="id"
+            value="<%= userData._id %>"
+          />
+          <input type="submit" name="review" value="like" id="like" />
+          <label for="like" class="like">
+            <svg
+              data-name="Layer 1"
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 48.5 48.3"
+            >
+              <circle
+                cx="24.4"
+                cy="24.2"
+                fill="#fff"
+                data-name="Ellipse 6"
+                r="23.3"
+              />
+              <path
+                d="M24 37S2 27 12 18s12 3 12 3 4-12 13-4-13 20-13 20z"
+                fill="#e65b6b"
+                data-name="Path 19"
+              />
+            </svg>
+          </label>
+        </form>
+
+        <form class="addData" action="/like" method="post">
+          <input
+            type="text"
+            class="userId"
+            name="id"
+            value="<%= userData._id %>"
+          />
+          <input type="submit" name="review" value="megalike" id="megalike" />
+          <label for="megalike" class="megalike">
+            <svg
+              id="Layer_1"
+              data-name="Layer 1"
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 48.5 48.3"
+            >
+              <defs>
+                <style>
+                  .cls-1 {
+                    fill: #fff;
+                  }
+                </style>
+              </defs>
+              <circle
+                class="cls-1"
+                cx="24.2"
+                cy="24.2"
+                id="Ellipse_5"
+                data-name="Ellipse 5"
+                r="23.3"
+              />
+              <circle
+                cx="24.2"
+                cy="24.2"
+                fill="#f8971d"
+                id="Ellipse_9"
+                data-name="Ellipse 9"
+                r="23.3"
+              />
+              <path
+                class="cls-1"
+                d="M19 23S4 29 5 20s7-4 7-4-4-8 4-8 3 15 3 15z"
+                id="Path_13"
+                data-name="Path 13"
+              />
+              <path
+                class="cls-1"
+                d="M29 22S23 7 31 8s5 7 5 7 7-4 8 4-15 3-15 3z"
+                id="Path_14"
+                data-name="Path 14"
+              />
+              <path
+                class="cls-1"
+                d="M7 30c0-8 8 0 17 0s18-8 18 0-8 15-18 15S7 38 7 30z"
+                id="Path_15"
+                data-name="Path 15"
+              />
+            </svg>
+          </label>
+        </form>
+
+        <form class="addData" action="/like" method="post">
+          <input
+            type="text"
+            class="userId"
+            name="id"
+            value="<%= userData._id %>"
+          />
+          <input type="submit" name="review" value="dislike" id="dislike" />
+          <label for="dislike" class="dislike">
+            <svg
+              data-name="Layer 1"
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 48.5 48.3"
+            >
+              <circle
+                cx="24.5"
+                cy="24.2"
+                fill="#fff"
+                data-name="Ellipse 7"
+                r="23.3"
+              />
+              <path
+                d="M11 33L32 6l11 9-28 25z"
+                fill="#600c0e"
+                data-name="Path 21"
+              />
+              <path
+                d="M6 20l8-11 27 23-5 7z"
+                fill="#e37f8b"
+                data-name="Path 20"
+              />
+            </svg>
+          </label>
+        </form>
+      </div>
+    </main>
+    <% } else{ %>
+
+    <div class="noUsers">
+      <h1>
+        You liked to many people... You liked the whole database 0_0
+      </h1>
+      <a href="./chat">Checkout your matches</a>
+    </div>
+
+    <% } %>
+  </body>
+</html>
