@@ -2,9 +2,12 @@
 <html lang="en">
   <%- include ("includes/head.ejs") %>
 
-  <body id="loginForm">
-    <%- include ("includes/header.ejs") %> <% for (var index = 0; index <
-    users.length; index++) { %>
+  <body id="liked">
+    
+    <%- include ("includes/header.ejs") %> 
+    <main>
+    <% for (var index = 0; index < users.length; index++) { %>
+      
     <div class="person">
       <figure>
         <img src="/images/swipe.jpg" alt="" />
@@ -19,5 +22,6 @@
       </div>
     </div>
     <% } %>
+  </main>
   </body>
 </html>

@@ -121,9 +121,12 @@ app.post('/like', async (req, res) => {
           likes: req.body.id,
         },
       }
+
     );
     userDB.updateMany({}, { $set: { 'likes.$[]': ObjectId(req.body.id) } });
     req.session.sessionId.likes.push(ObjectId(req.body.id));
+    res.redirect('home');
+
   } else if (req.body.review === 'dislike') {
     userDB.updateOne(
       {
@@ -132,7 +135,10 @@ app.post('/like', async (req, res) => {
       {
         $inc: { number: 1 },
       }
+
     );
+    res.redirect('home');
+
   } else if (req.body.review === 'megalike') {
     userDB.updateOne(
       {
@@ -145,10 +151,24 @@ app.post('/like', async (req, res) => {
         },
       }
     );
+    userDB.updateMany({}, { $set: { 'likes.$[]': ObjectId(req.body.id) } });
     req.session.sessionId.megalikes.push(ObjectId(req.body.id));
+    res.redirect('home');
+
   }
 
-  res.redirect('home');
+
+  if(req.body.delete){
+    console.log("delteAccount")
+    const id = req.session.sessionId._id;
+
+    // remove user
+    userDB.deleteOne({_id: ObjectId(id)});
+    res.redirect('/')
+    req.session.destroy();
+
+  }
+
 });
 
 app.get('/likes', async (req, res) => {
@@ -159,25 +179,11 @@ app.get('/likes', async (req, res) => {
       .toArray();
     console.log(usersIds);
 
-    // res.render('liked', { users: usersIds });
-    //   .toArray();
-    // console.log('dit zijn de likes');
-    // console.log(likes);
-    // console.log(likedUser[0]);
-    // res.render('liked', { users: likedUsers[0] });
 
-    // const likedUsers = req.session.sessionId.likes;
-
-    // const likes = await userDB
-    //   .find({
-    //     _id: { $in: (likedUsers)},
-    //   })
-    //   .toArray();
-    // console.log('dit zijn de likes');
-    // console.log(likes);
-    // console.log(likedUser[0]);
     res.render('liked', { users: usersIds });
   }
+
+
 });
 // ------------------------------
 
