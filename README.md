@@ -64,3 +64,11 @@ Type the the following into you browser search bar:
 http://localhost:1000
 ```
 If you run into any problem feel free to [leave an issue](https://github.com/SimonPlanje/DatingApp/issues) in the top navigation bar of this repo!
+
+
+#### Sources
+* Joyent, Inc. (z.d.). Node. Node.js. Geraadpleegd 20 mei 2020, van https://nodejs.org/en/
+
+* MongoDB. (z.d.). The most popular database for modern apps. Geraadpleegd 20 mei 2020, van https://www.mongodb.com/
+
+* NPM. (z.d.). npm | get npm. get npm. Geraadpleegd 20 mei 2020, van https://www.npmjs.com/get-npm
