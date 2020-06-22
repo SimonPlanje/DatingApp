@@ -1,6 +1,5 @@
 const express = require('express'); //import express om te gebruiken. Express var is nu de express funcite
 const app = express(); //koppel de var express aan de var app zodat je met alleen app epxress kan oproepen
-const slug = require('slug'); //zorgt ervoor dat je geen html code in een formulier kan proppen.
 const bodyParser = require('body-parser'); //maakt het makkelijker om de values uit een formulier te halen
 require('dotenv').config();
 
@@ -10,7 +9,6 @@ const ObjectId = mongo.ObjectID;
 let db = null;
 const url = process.env.DB_LINK;
 let userDB = null;
-let matchDB = null;
 
 //CONST FOR SESSION
 const session = require('express-session');
@@ -38,7 +36,7 @@ app.listen(1000, () => console.log('server is working'));
 app.use(
   require('express-session')({
     name: sessionId,
-    secret: sessionSecret,
+    secret: process.env.SES_SECRET,
     store: store,
     resave: false, //tussentijds dingen opslaan terwijl hij niks heeft aangepast hoeft niet!!
     saveUninitialized: false,
@@ -57,11 +55,11 @@ app.use(express.static(__dirname + '/static')); //zorgt dat ik mijn css en image
 app.set('view engine', 'ejs');
 app.set('views', 'views');
 
-//----------------THIS IS WHERE THE MAGIC BEGINS-----------------------
+//----------------THIS IS WHERE THE MAGIC BEGINS (logic)-----------------------
 
 //POST FORM
 
-app.get('/', async (req, res) => {
+app.get('/', (req, res) => {
   res.render('form');
 });
 
@@ -78,7 +76,7 @@ app.post('/', (req, res) => {
 
   //check if data is inserted
   if (data) {
-    //creatre sesssion id
+    //create sesssion id
     req.session.sessionId = data;
     // console.log('session id =');
     // console.log(req.session.sessionId);
@@ -96,6 +94,7 @@ app.post('/', (req, res) => {
 //GET HOMEPAGE
 app.get('/home', async (req, res) => {
   if (req.session.sessionId._id) {
+    //render all id's in database exept for your own
     const users = await userDB
       .find({ _id: { $ne: ObjectId(req.session.sessionId._id) } })
       .toArray();

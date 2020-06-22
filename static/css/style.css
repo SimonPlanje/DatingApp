@@ -164,11 +164,11 @@ h3 {
 #likeForm .megalike,
 #likeForm .like,
 #likeForm .dislike {
+  height: 8rem;
+  width: 8rem;
   margin: .1rem;
   padding: .5rem;
   display: inline-block;
-  height: 8rem;
-  width: 8rem;
   background-repeat: no-repeat;
   transition: 0.1s ease-out;
 }
@@ -224,24 +224,36 @@ margin: 1rem;
   margin: 1rem;
   position: absolute;
   right: 0;
-  background-color: orangered;
+  background-color: darkorange;
   padding: .6rem;
   border-radius: 3rem;
+  cursor: pointer;
+}
+
+#deleteButton form:hover{
+  background-color: orangered;
+
 }
 
 #deleteButton input{
+  cursor: pointer;
 color: white;
 background: none;
 border: none;
 font-weight: 700;
 font-size: 1rem;
 margin-left: .7rem;
-
 }
 
 #deleteButton label{
+  cursor: pointer;
 fill: white;
+}
 
+#deleteButton label:focus,
+#deleteButton input:focus
+{
+  outline: none;
 }
 
 @media only screen and (max-width: 875px) {
